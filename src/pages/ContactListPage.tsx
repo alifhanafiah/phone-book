@@ -1,19 +1,21 @@
 import { css } from '@emotion/react';
+import { colors } from '../assets/styles/const';
+import Divider from '../components/Divider';
 import ListsOfContact from '../components/ListsOfContact';
 import Nav from '../components/Nav';
 
 const contactListCss = {
   header: css({
-    paddingBlock: '10rem',
-    backgroundSize: '2rem',
+    position: 'relative',
+    backgroundColor: colors.secondary,
+    paddingBlock: '6rem',
     textAlign: 'center',
-    fontSize: '2rem',
-    fontWeight: 'bold',
   }),
 
   main: css({
-    position: 'relative',
-    zIndex: 1,
+    paddingTop: '1rem',
+    maxWidth: '90%',
+    margin: '0 auto',
   }),
 };
 
@@ -21,7 +23,8 @@ const ContactListPage = () => {
   return (
     <>
       <header css={contactListCss.header}>
-        <h1>Contacts</h1>
+        <h1>📖 Contacts</h1>
+        <Divider />
       </header>
       <main css={contactListCss.main}>
         <Nav />

@@ -9,7 +9,9 @@ const GlobalStyles = css`
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+  }
 
+  body {
     font-family: 'Fira Sans', sans-serif;
     background-color: black;
     color: ${colors.primary};

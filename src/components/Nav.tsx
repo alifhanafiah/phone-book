@@ -27,6 +27,7 @@ const navCss = {
 
   iconSvg: css({
     backgroundColor: 'transparent',
+    color: colors.primary,
   }),
 };
 
