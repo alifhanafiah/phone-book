@@ -17,7 +17,7 @@ const customShapeStyle = css({
   },
 
   '.shape-fill': {
-    fill: '#000000',
+    fill: '#0f172a',
   },
 
   '@media (max-width: 767px)': {

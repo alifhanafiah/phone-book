@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 import { colors } from '../assets/styles/const';
 
 const navCss = {
@@ -18,16 +19,17 @@ const navCss = {
     border: `1px solid ${colors.secondary}`,
     borderRadius: '50%',
     padding: '0.5rem',
+    color: colors.secondary,
     transition: '250ms',
 
     ':hover': {
       backgroundColor: colors.secondary,
+      color: colors.primary,
     },
   }),
 
   iconSvg: css({
     backgroundColor: 'transparent',
-    color: colors.primary,
   }),
 };
 
@@ -36,9 +38,9 @@ const Nav = () => {
     <nav>
       <ul css={navCss.list}>
         <li>
-          <a href="#" css={navCss.icon}>
+          <Link to="/add" css={navCss.icon}>
             <AiOutlinePlus css={navCss.iconSvg} />
-          </a>
+          </Link>
         </li>
       </ul>
     </nav>

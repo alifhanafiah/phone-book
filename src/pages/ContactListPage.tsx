@@ -8,14 +8,22 @@ const contactListCss = {
   header: css({
     position: 'relative',
     backgroundColor: colors.secondary,
-    paddingBlock: '6rem',
+    color: colors.primary,
+    paddingTop: '3rem',
+    paddingBottom: '5rem',
     textAlign: 'center',
   }),
 
   main: css({
     paddingTop: '1rem',
-    maxWidth: '90%',
+    maxWidth: '768px',
+    width: '90%',
     margin: '0 auto',
+  }),
+
+  title: css({
+    marginTop: '1.5rem',
+    marginBottom: '.5rem',
   }),
 };
 
@@ -23,11 +31,14 @@ const ContactListPage = () => {
   return (
     <>
       <header css={contactListCss.header}>
-        <h1>📖 Contacts</h1>
+        <h1>📖 Phonebook</h1>
         <Divider />
       </header>
       <main css={contactListCss.main}>
         <Nav />
+        <h2 css={contactListCss.title}>⭐ Favorites</h2>
+        <ListsOfContact />
+        <h2 css={contactListCss.title}>🫂 Contacts</h2>
         <ListsOfContact />
       </main>
     </>

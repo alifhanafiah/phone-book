@@ -1,6 +1,24 @@
 import { Global, css } from '@emotion/react';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { colors } from './assets/styles/const';
+import ContactDetailPage from './pages/ContactDetailPage';
 import ContactListPage from './pages/ContactListPage';
+import FormContactPage from './pages/FormContactPage';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    Component: ContactListPage,
+  },
+  {
+    path: '/add',
+    Component: FormContactPage,
+  },
+  {
+    path: '/contact',
+    Component: ContactDetailPage,
+  },
+]);
 
 const GlobalStyles = css`
   *,
@@ -13,12 +31,17 @@ const GlobalStyles = css`
 
   body {
     font-family: 'Fira Sans', sans-serif;
-    background-color: black;
-    color: ${colors.primary};
+    background-color: ${colors.primary};
+    color: ${colors.secondary};
   }
 
   li {
     list-style: none;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
   }
 `;
 
@@ -26,7 +49,7 @@ function App() {
   return (
     <>
       <Global styles={GlobalStyles} />
-      <ContactListPage />
+      <RouterProvider router={router} />
     </>
   );
 }
