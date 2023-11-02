@@ -1,7 +1,6 @@
 import { Global, css } from '@emotion/react';
-import styled from '@emotion/styled';
-import tileBg from './assets/images/phone-tile-bg.png';
-import Nav from './components/Nav';
+import { colors } from './assets/styles/const';
+import ContactListPage from './pages/ContactListPage';
 
 const GlobalStyles = css`
   *,
@@ -12,26 +11,20 @@ const GlobalStyles = css`
     margin: 0;
 
     font-family: 'Fira Sans', sans-serif;
+    background-color: black;
+    color: ${colors.primary};
+  }
+
+  li {
+    list-style: none;
   }
 `;
-
-const Header = styled.header({
-  paddingBlock: '10rem',
-  backgroundImage: `url(${tileBg})`,
-  backgroundSize: '2rem',
-  textAlign: 'center',
-  fontSize: '2rem',
-  fontWeight: 'bold',
-});
-const Main = styled.main({});
 
 function App() {
   return (
     <>
       <Global styles={GlobalStyles} />
-      <Header>Contact</Header>
-      <Nav />
-      <Main>Main</Main>
+      <ContactListPage />
     </>
   );
 }
