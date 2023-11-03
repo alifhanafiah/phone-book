@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     Component: FormContactPage,
   },
   {
-    path: '/contact',
+    path: '/contact/:id',
     Component: ContactDetailPage,
   },
 ]);

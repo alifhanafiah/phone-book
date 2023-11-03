@@ -26,7 +26,7 @@ const listsOfContactCss = {
 
   phone: css({
     fontSize: '.8rem',
-    fontWeight: 'light',
+    fontWeight: 'lighter',
     color: '#9ca3af',
   }),
 };
@@ -35,7 +35,7 @@ const ListsOfContact = () => {
   return (
     <ul>
       <li css={listsOfContactCss.list}>
-        <Link to="/contact" css={listsOfContactCss.contact}>
+        <Link to={`/contact/1`} css={listsOfContactCss.contact}>
           <img src={img} css={listsOfContactCss.image} />
           <div>
             <h3 css={listsOfContactCss.name}>Hasyim</h3>
