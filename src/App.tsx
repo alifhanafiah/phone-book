@@ -3,12 +3,14 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { colors } from './assets/styles/const';
 import ContactDetailPage from './pages/ContactDetailPage';
 import ContactListPage from './pages/ContactListPage';
+import ErrorPage from './pages/ErrorPage';
 import FormContactPage from './pages/FormContactPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
     Component: ContactListPage,
+    errorElement: <ErrorPage />,
   },
   {
     path: '/add',
