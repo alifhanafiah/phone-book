@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import img from '../assets/images/google-contacts.png';
 
 const listsOfContactCss = {
-  list: css({}),
+  list: css({
+    marginBottom: '.5rem',
+  }),
 
   contact: css({
     display: 'flex',
@@ -31,18 +33,36 @@ const listsOfContactCss = {
   }),
 };
 
-const ListsOfContact = () => {
+type ListsOfContactProps = {
+  contacts: {
+    created_at: string;
+    first_name: string;
+    id: number;
+    last_name: string;
+    phones: { number: string }[];
+  }[];
+};
+
+const ListsOfContact = ({ contacts }: ListsOfContactProps) => {
+  console.log(contacts);
+
   return (
     <ul>
-      <li css={listsOfContactCss.list}>
-        <Link to={`/contact/1`} css={listsOfContactCss.contact}>
-          <img src={img} css={listsOfContactCss.image} />
-          <div>
-            <h3 css={listsOfContactCss.name}>Hasyim</h3>
-            <p css={listsOfContactCss.phone}>+62 851511</p>
-          </div>
-        </Link>
-      </li>
+      {contacts.map(({ id, first_name, last_name, phones }) => {
+        return (
+          <li css={listsOfContactCss.list}>
+            <Link to={`/contact/${id}`} css={listsOfContactCss.contact}>
+              <img src={img} css={listsOfContactCss.image} />
+              <div>
+                <h3 css={listsOfContactCss.name}>
+                  {last_name}, {first_name}
+                </h3>
+                <p css={listsOfContactCss.phone}>{phones[0].number}</p>
+              </div>
+            </Link>
+          </li>
+        );
+      })}
     </ul>
   );
 };

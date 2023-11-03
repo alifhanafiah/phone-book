@@ -1,8 +1,10 @@
+import { useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 import { colors } from '../assets/styles/const';
 import Divider from '../components/Divider';
 import ListsOfContact from '../components/ListsOfContact';
 import Nav from '../components/Nav';
+import { GET_CONTACT_LIST } from '../queries';
 
 const contactListCss = {
   header: css({
@@ -28,6 +30,11 @@ const contactListCss = {
 };
 
 const ContactListPage = () => {
+  const { loading, error, data } = useQuery(GET_CONTACT_LIST);
+
+  if (loading) return 'Loading...';
+  if (error) return `Error! ${error.message}`;
+
   return (
     <>
       <header css={contactListCss.header}>
@@ -37,9 +44,9 @@ const ContactListPage = () => {
       <main css={contactListCss.main}>
         <Nav />
         <h2 css={contactListCss.title}>⭐ Favorites</h2>
-        <ListsOfContact />
+        <ListsOfContact contacts={data.contact} />
         <h2 css={contactListCss.title}>🫂 Contacts</h2>
-        <ListsOfContact />
+        <ListsOfContact contacts={data.contact} />
       </main>
     </>
   );
