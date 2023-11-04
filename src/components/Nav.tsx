@@ -38,7 +38,7 @@ const Nav = () => {
     <nav>
       <ul css={navCss.list}>
         <li>
-          <Link to="/add" css={navCss.icon}>
+          <Link to="/contact/add" css={navCss.icon}>
             <AiOutlinePlus css={navCss.iconSvg} />
           </Link>
         </li>
