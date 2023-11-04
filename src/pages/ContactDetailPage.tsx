@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 import { useParams } from 'react-router-dom';
 import img from '../assets/images/google-contacts.png';
-import { colors } from '../assets/styles/const';
 import Loading from '../components/Loading';
 import { GET_CONTACT_DETAIL } from '../queries';
 
@@ -43,11 +42,10 @@ const contactDetailPage = {
   }),
 
   data: css({
-    color: '#9ca3af',
     marginBlock: '.5rem',
 
-    'p + p': {
-      color: colors.secondary,
+    '& p:first-of-type': {
+      color: '#9ca3af',
     },
   }),
 };
@@ -88,15 +86,15 @@ const ContactDetailPage = () => {
       </h2>
 
       <div css={contactDetailPage.data}>
-        <p>Created at</p>
-        <p>{formattedDate}</p>
-      </div>
-
-      <div css={contactDetailPage.data}>
-        <p>Phone</p>
+        <p>Phone(s)</p>
         {contact?.phones.map((phone, index) => {
           return <p key={index}>{phone.number}</p>;
         })}
+      </div>
+
+      <div css={contactDetailPage.data}>
+        <p>Created at</p>
+        <p>{formattedDate}</p>
       </div>
     </div>
   );
