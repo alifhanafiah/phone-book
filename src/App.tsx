@@ -5,20 +5,27 @@ import ContactDetailPage from './pages/ContactDetailPage';
 import ContactListPage from './pages/ContactListPage';
 import ErrorPage from './pages/ErrorPage';
 import FormContactPage from './pages/FormContactPage';
+import RootPage from './pages/RootPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    Component: ContactListPage,
+    element: <RootPage />,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: '/add',
-    Component: FormContactPage,
-  },
-  {
-    path: '/contact/:id',
-    Component: ContactDetailPage,
+    children: [
+      {
+        path: '/',
+        element: <ContactListPage />,
+      },
+      {
+        path: '/add',
+        element: <FormContactPage />,
+      },
+      {
+        path: '/contact/:id',
+        element: <ContactDetailPage />,
+      },
+    ],
   },
 ]);
 
