@@ -1,8 +1,14 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ADD_CONTACT_WITH_PHONES } from '../apollo/mutations';
+import { GET_CONTACT_NAMES_LIST } from '../apollo/queries';
+
+type Contact = {
+  first_name: string;
+  last_name: string;
+};
 
 const formContact = {
   container: css({
@@ -64,7 +70,7 @@ const formContact = {
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
 
     '&:hover': {
-      background: '#d61111', // Darken the color on hover
+      background: '#d61111',
     },
   }),
 };
@@ -73,23 +79,33 @@ const FormContactPage = () => {
   const navigate = useNavigate();
   const specialCharacterPattern = /[^a-zA-Z0-9 ]/; // Regular expression to check for special characters
 
+  const [errorMessage, setErrorMessage] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumbers, setPhoneNumbers] = useState<string[]>(['']);
 
+  const { data } = useQuery(GET_CONTACT_NAMES_LIST);
+
   const [addContact, { loading: loadingSubmit, error: errorSubmit }] =
     useMutation(ADD_CONTACT_WITH_PHONES);
 
-  let errorMessage = '';
   if (errorSubmit) {
-    errorMessage = 'Make sure the field all valid';
+    setErrorMessage('Make sure the field all valid');
   }
+
+  // Define a function to check if a contact name exists in the list
+  const isContactNameInList = (contactList: Contact[], contactName: string) => {
+    return contactList.some((contact) => {
+      const fullName = `${contact.first_name} ${contact.last_name}`;
+      return fullName === contactName;
+    });
+  };
 
   const handleAddPhone = () => {
     if (phoneNumbers[phoneNumbers.length - 1] !== '') {
       setPhoneNumbers([...phoneNumbers, '']);
     } else {
-      errorMessage = 'You have to fill the phone number to add more';
+      setErrorMessage('You have to fill the phone number to add more');
     }
   };
 
@@ -113,32 +129,35 @@ const FormContactPage = () => {
       specialCharacterPattern.test(lastName)
     ) {
       // Handle special characters not allowed
-      errorMessage =
-        'Contact name contains special characters. Only alphanumeric and spaces are allowed.';
+      setErrorMessage(
+        'Contact name contains special characters. Only alphanumeric and spaces are allowed.'
+      );
     } else {
-      // // Check for uniqueness (e.g., using Apollo Client and GraphQL)
-      // const isUnique = await checkContactNameUniqueness(contactName);
-      // if (isUnique) {
-      //   // Contact name is unique, proceed with saving it
-      //   // You can make your GraphQL mutation here to save the contact name
-      // } else {
-      //   // Handle non-unique contact name
-      //   alert('Contact name is not unique. Please choose a different name.');
-      // }
-    }
-
-    try {
-      await addContact({
-        variables: {
-          first_name: firstName,
-          last_name: lastName,
-          phones: phoneNumbers.map((number) => ({ number })),
-        },
-      });
-      // Handle success or clear form
-      navigate('/');
-    } catch (error) {
-      console.error(error);
+      // Check for uniqueness
+      const contactList = data.contact;
+      const contactNameToCheck = `${firstName} ${lastName}`;
+      if (isContactNameInList(contactList, contactNameToCheck)) {
+        // Handle non-unique contact name
+        setErrorMessage(
+          'Contact name is not unique. Please choose a different name.'
+        );
+      } else {
+        // Contact name is unique, proceed with saving it
+        try {
+          await addContact({
+            variables: {
+              first_name: firstName,
+              last_name: lastName,
+              phones: phoneNumbers.map((number) => ({ number })),
+            },
+          });
+          // Handle success or clear form
+          setErrorMessage('');
+          navigate('/');
+        } catch (error) {
+          console.error(error);
+        }
+      }
     }
   };
 
