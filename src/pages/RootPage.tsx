@@ -12,6 +12,13 @@ const rootCss = {
     paddingBottom: '5rem',
     textAlign: 'center',
   }),
+
+  main: css({
+    maxWidth: '768px',
+    width: '90%',
+    margin: '0 auto',
+    paddingTop: '1.5rem',
+  }),
 };
 
 const RootPage = () => {
@@ -21,7 +28,9 @@ const RootPage = () => {
         <h1>📖 Phonebook</h1>
         <Divider />
       </header>
-      <Outlet />
+      <main css={rootCss.main}>
+        <Outlet />
+      </main>
     </>
   );
 };
