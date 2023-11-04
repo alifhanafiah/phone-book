@@ -1,9 +1,9 @@
 import { useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 import { useParams } from 'react-router-dom';
+import { GET_CONTACT_DETAIL } from '../apollo/queries';
 import img from '../assets/images/google-contacts.png';
 import Loading from '../components/Loading';
-import { GET_CONTACT_DETAIL } from '../queries';
 
 type ContactData = {
   contact_by_pk: {
