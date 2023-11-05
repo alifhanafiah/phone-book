@@ -1,25 +1,27 @@
 import { useMutation } from '@apollo/client';
 import { css } from '@emotion/react';
 import { BiTrashAlt } from 'react-icons/bi';
-import { MdOutlineFavorite } from 'react-icons/md';
+import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { DELETE_CONTACT_BY_PK } from '../apollo/mutations';
 import { GET_CONTACT_LIST } from '../apollo/queries';
 import img from '../assets/images/google-contacts.png';
 import { colors } from '../assets/styles/const';
 
+type Contact = {
+  created_at: string;
+  first_name: string;
+  id: number;
+  last_name: string;
+  phones: { number: string }[];
+};
+
 type ListsOfContactProps = {
-  contacts: {
-    created_at: string;
-    first_name: string;
-    id: number;
-    last_name: string;
-    phones: { number: string }[];
-  }[];
+  contacts: Contact[];
 
-  // favorited: Record<number, boolean>;
+  onAddFavorite: (contact: Contact) => void;
 
-  // toggleFavorite: (contact: Contact) => void;
+  isFavoriteList: boolean;
 };
 
 const listsOfContact = {
@@ -77,9 +79,9 @@ const listsOfContact = {
 };
 
 const ListsOfContact = ({
-  // favorited,
-  // toggleFavorite,
   contacts,
+  onAddFavorite,
+  isFavoriteList,
 }: ListsOfContactProps) => {
   const [deleteData] = useMutation(DELETE_CONTACT_BY_PK, {
     refetchQueries: [GET_CONTACT_LIST],
@@ -99,7 +101,7 @@ const ListsOfContact = ({
 
   return (
     <ul>
-      {contacts.map((contact) => {
+      {contacts?.map((contact) => {
         const { id, first_name, last_name, phones } = contact;
 
         return (
@@ -116,11 +118,14 @@ const ListsOfContact = ({
 
             <div css={listsOfContact.buttonContainer}>
               <button
-                // onClick={() => toggleFavorite(contact)}
+                onClick={() => onAddFavorite(contact)}
                 css={listsOfContact.button}
               >
-                {/* {favorited ? <MdOutlineFavorite /> : <MdOutlineFavoriteBorder />} */}
-                <MdOutlineFavorite />
+                {isFavoriteList ? (
+                  <MdOutlineFavorite />
+                ) : (
+                  <MdOutlineFavoriteBorder />
+                )}
               </button>
 
               <button
