@@ -1,6 +1,10 @@
+import { useMutation } from '@apollo/client';
 import { css } from '@emotion/react';
-// import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md';
+import { BiTrashAlt } from 'react-icons/bi';
+import { MdOutlineFavorite } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { DELETE_CONTACT_BY_PK } from '../apollo/mutations';
+import { GET_CONTACT_LIST } from '../apollo/queries';
 import img from '../assets/images/google-contacts.png';
 import { colors } from '../assets/styles/const';
 
@@ -36,7 +40,13 @@ const listsOfContact = {
     gap: '1rem',
   }),
 
+  buttonContainer: css({
+    display: 'flex',
+    gap: '.25rem',
+  }),
+
   button: css({
+    display: 'flex',
     border: 'none',
     color: colors.secondary,
     backgroundColor: 'inherit',
@@ -65,10 +75,26 @@ const listsOfContact = {
 };
 
 const ListsOfContact = ({
+  // favorited,
+  // toggleFavorite,
   contacts,
-}: // favorited,
-// toggleFavorite,
-ListsOfContactProps) => {
+}: ListsOfContactProps) => {
+  const [deleteData] = useMutation(DELETE_CONTACT_BY_PK, {
+    refetchQueries: [GET_CONTACT_LIST],
+  });
+
+  const deleteHandler = async (id: number) => {
+    const isDelete = confirm('Are you sure?');
+
+    if (isDelete) {
+      await deleteData({
+        variables: {
+          id: id,
+        },
+      });
+    }
+  };
+
   return (
     <ul>
       {contacts.map((contact) => {
@@ -82,15 +108,26 @@ ListsOfContactProps) => {
                 <h3 css={listsOfContact.name}>
                   {first_name} {last_name}
                 </h3>
-                <p css={listsOfContact.phone}>{phones[0].number}</p>
+                <p css={listsOfContact.phone}>{phones[0]?.number}</p>
               </div>
             </Link>
-            <button
-              // onClick={() => toggleFavorite(contact)}
-              css={listsOfContact.button}
-            >
-              {/* {favorited ? <MdOutlineFavorite /> : <MdOutlineFavoriteBorder />} */}
-            </button>
+
+            <div css={listsOfContact.buttonContainer}>
+              <button
+                // onClick={() => toggleFavorite(contact)}
+                css={listsOfContact.button}
+              >
+                {/* {favorited ? <MdOutlineFavorite /> : <MdOutlineFavoriteBorder />} */}
+                <MdOutlineFavorite />
+              </button>
+
+              <button
+                onClick={() => deleteHandler(id)}
+                css={listsOfContact.button}
+              >
+                <BiTrashAlt />
+              </button>
+            </div>
           </li>
         );
       })}

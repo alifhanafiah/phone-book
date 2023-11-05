@@ -14,9 +14,11 @@ const contactListPage = {
 
 const ContactListPage = () => {
   const { loading, error, data } = useQuery(GET_CONTACT_LIST, {
-    // variables: {
-    //   limit: 10,
-    // },
+    variables: {
+      order_by: {
+        first_name: 'asc',
+      },
+    },
     fetchPolicy: 'network-only',
   });
 
@@ -27,7 +29,7 @@ const ContactListPage = () => {
     <>
       <Nav />
       <h2 css={contactListPage.title}>⭐ Favorite</h2>
-      <ListsOfContact contacts={data.contact} />
+      {/* <ListsOfContact contacts={data.contact} /> */}
       <h2 css={contactListPage.title}>🫂 Contacts</h2>
       <ListsOfContact contacts={data.contact} />
     </>
