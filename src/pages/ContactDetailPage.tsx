@@ -59,7 +59,7 @@ const ContactDetailPage = () => {
     },
   });
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading height="20vh" />;
   if (error) return `Error! ${error.message}`;
 
   const contact = data?.contact_by_pk;
