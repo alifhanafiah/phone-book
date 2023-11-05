@@ -71,7 +71,7 @@ const ContactListPage = () => {
     }
   };
 
-  const displayedContacts = allContacts.slice(offset, offset + limit);
+  // const displayedContacts = allContacts.slice(offset, offset + limit);
 
   const favoriteContactData = allContacts.filter((contact: Contact) =>
     favoriteContacts
@@ -79,9 +79,14 @@ const ContactListPage = () => {
       .includes(contact.id)
   );
 
-  const regularContactData = displayedContacts.filter(
+  const regularContactData = allContacts.filter(
     (contact: Contact) =>
       !favoriteContacts.some((favContact) => favContact.id === contact.id)
+  );
+
+  const regularContactDataDisplay = regularContactData.slice(
+    offset,
+    offset + limit
   );
 
   const addFavorite = (contact: Contact) => {
@@ -125,7 +130,7 @@ const ContactListPage = () => {
         <Loading height="10vh" />
       ) : (
         <ListsOfContact
-          contacts={regularContactData}
+          contacts={regularContactDataDisplay}
           onAddFavorite={addFavorite}
           isFavoriteList={false}
         />
