@@ -6,6 +6,7 @@ import ListsOfContact from '../components/ListsOfContact';
 import Loading from '../components/Loading';
 import Nav from '../components/Nav';
 import Pagination from '../components/Pagination';
+import SearchBar from '../components/SearchBar';
 import { Contact } from '../types';
 
 const contactListPage = {
@@ -18,8 +19,9 @@ const contactListPage = {
 const ContactListPage = () => {
   const [limit] = useState(10);
   const [offset, setOffset] = useState(0);
-  const [allContacts, setAllContacts] = useState<Contact[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
+  const [allContacts, setAllContacts] = useState<Contact[]>([]);
   const [favoriteContacts, setFavoriteContacts] = useState<Contact[]>(() => {
     const localValue = localStorage.getItem('favoriteContacts');
     return localValue ? JSON.parse(localValue) : [];
@@ -32,9 +34,12 @@ const ContactListPage = () => {
 
   const { loading, error, data } = useQuery(GET_CONTACT_LIST, {
     variables: {
+      // search for contacts that match the searchQuery in either the first_name or last_name fields.
       where: {
-        first_name: { _like: '%%' },
-        last_name: { _like: '%%' },
+        _or: [
+          { first_name: { _like: `%${searchQuery}%` } },
+          { last_name: { _like: `%${searchQuery}%` } },
+        ],
       },
       order_by: {
         first_name: 'asc',
@@ -52,6 +57,10 @@ const ContactListPage = () => {
 
   if (error) return `Error! ${error.message}`;
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
   const nextPage = () => {
     if (offset + limit < allContacts.length) {
       setOffset((prevOffset) => prevOffset + limit);
@@ -63,8 +72,6 @@ const ContactListPage = () => {
       setOffset((prevOffset) => prevOffset - limit);
     }
   };
-
-  // const displayedContacts = allContacts.slice(offset, offset + limit);
 
   const favoriteContactData = allContacts.filter((contact: Contact) =>
     favoriteContacts
@@ -106,6 +113,8 @@ const ContactListPage = () => {
   return (
     <>
       <Nav />
+
+      <SearchBar onSearch={handleSearch} />
 
       <h2 css={contactListPage.title}>⭐ Favorite</h2>
       {loading ? (

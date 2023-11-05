@@ -56,6 +56,10 @@ const GlobalStyles = css`
   button {
     font-family: inherit;
   }
+
+  input {
+    font-family: inherit;
+  }
 `;
 
 function App() {
