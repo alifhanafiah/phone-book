@@ -52,6 +52,10 @@ const GlobalStyles = css`
     text-decoration: none;
     color: inherit;
   }
+
+  button {
+    font-family: inherit;
+  }
 `;
 
 function App() {

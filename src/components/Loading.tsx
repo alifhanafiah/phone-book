@@ -1,11 +1,8 @@
 import { css, keyframes } from '@emotion/react';
 
-const loaderStyle = css({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '50vh',
-});
+type LoadingProps = {
+  height: string;
+};
 
 const spin = keyframes`
   0% {
@@ -27,9 +24,16 @@ const spinnerStyle = css({
   animation: `${spin} 2s linear infinite`,
 });
 
-const Loading = () => {
+const Loading = ({ height }: LoadingProps) => {
   return (
-    <div css={loaderStyle}>
+    <div
+      css={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height,
+      }}
+    >
       <div css={spinnerStyle} />
     </div>
   );
