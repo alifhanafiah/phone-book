@@ -41,39 +41,31 @@ const Pagination = ({
   disableNext,
 }: PaginationProps) => {
   return (
-    <>
-      {disableNext && (
-        <p css={{ textAlign: 'center', marginBlock: '1rem' }}>
-          There are no more contacts
-        </p>
-      )}
+    <div css={pagination.container}>
+      <button
+        css={pagination.button}
+        onClick={onPrevClick}
+        style={
+          disablePrev
+            ? { backgroundColor: 'lightgray', cursor: 'not-allowed' }
+            : {}
+        }
+      >
+        Prev
+      </button>
 
-      <div css={pagination.container}>
-        <button
-          css={pagination.button}
-          onClick={onPrevClick}
-          style={
-            disablePrev
-              ? { backgroundColor: 'lightgray', cursor: 'not-allowed' }
-              : {}
-          }
-        >
-          Prev
-        </button>
-
-        <button
-          css={pagination.button}
-          onClick={onNextClick}
-          style={
-            disableNext
-              ? { backgroundColor: 'lightgray', cursor: 'not-allowed' }
-              : {}
-          }
-        >
-          Next
-        </button>
-      </div>
-    </>
+      <button
+        css={pagination.button}
+        onClick={onNextClick}
+        style={
+          disableNext
+            ? { backgroundColor: 'lightgray', cursor: 'not-allowed' }
+            : {}
+        }
+      >
+        Next
+      </button>
+    </div>
   );
 };
 
