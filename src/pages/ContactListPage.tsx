@@ -25,9 +25,9 @@ const contactListPage = {
 const ContactListPage = () => {
   const [limit] = useState(10);
   const [offset, setOffset] = useState(0);
-  const [allContacts, setAllContacts] = useState([]);
+  const [allContacts, setAllContacts] = useState<Contact[]>([]);
 
-  const [favoriteContacts, setFavoriteContacts] = useState(() => {
+  const [favoriteContacts, setFavoriteContacts] = useState<Contact[]>(() => {
     const localValue = localStorage.getItem('favoriteContacts');
     return localValue ? JSON.parse(localValue) : [];
   });
@@ -39,6 +39,10 @@ const ContactListPage = () => {
 
   const { loading, error, data } = useQuery(GET_CONTACT_LIST, {
     variables: {
+      where: {
+        first_name: { _like: '%%' },
+        last_name: { _like: '%%' },
+      },
       order_by: {
         first_name: 'asc',
       },
@@ -69,29 +73,35 @@ const ContactListPage = () => {
 
   const displayedContacts = allContacts.slice(offset, offset + limit);
 
-  const favoriteContactData = displayedContacts.filter((contact: Contact) =>
-    favoriteContacts.includes(contact.id)
+  const favoriteContactData = allContacts.filter((contact: Contact) =>
+    favoriteContacts
+      .map((favContact: Contact) => favContact.id)
+      .includes(contact.id)
   );
+
   const regularContactData = displayedContacts.filter(
-    (contact: Contact) => !favoriteContacts.includes(contact.id)
+    (contact: Contact) =>
+      !favoriteContacts.some((favContact) => favContact.id === contact.id)
   );
 
   const addFavorite = (contact: Contact) => {
     // Check if the contact is already in the favorite list
-    if (!favoriteContacts.includes(contact.id)) {
-      setFavoriteContacts((prevFavoriteContacts: []) => [
+    if (!favoriteContacts.some((favContact) => favContact.id === contact.id)) {
+      setFavoriteContacts((prevFavoriteContacts) => [
         ...prevFavoriteContacts,
-        contact.id,
+        contact,
       ]);
     }
   };
 
   const removeFavorite = (contact: Contact) => {
     // Check if the contact is in the favorite list
-    if (favoriteContacts.includes(contact.id)) {
-      setFavoriteContacts((prevFavoriteContacts: []) => {
-        return prevFavoriteContacts.filter((id) => id !== contact.id);
-      });
+    if (favoriteContacts.some((favContact) => favContact.id === contact.id)) {
+      setFavoriteContacts((prevFavoriteContacts) =>
+        prevFavoriteContacts.filter(
+          (favContact) => favContact.id !== contact.id
+        )
+      );
     }
   };
 
@@ -121,10 +131,10 @@ const ContactListPage = () => {
         />
       )}
       <Pagination
-        onNextClick={nextPage}
         onPrevClick={prevPage}
-        disableNext={offset + limit >= allContacts.length}
+        onNextClick={nextPage}
         disablePrev={offset === 0}
+        disableNext={offset + limit >= allContacts.length}
       />
     </>
   );
