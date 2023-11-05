@@ -6,14 +6,7 @@ import ListsOfContact from '../components/ListsOfContact';
 import Loading from '../components/Loading';
 import Nav from '../components/Nav';
 import Pagination from '../components/Pagination';
-
-type Contact = {
-  created_at: string;
-  first_name: string;
-  id: number;
-  last_name: string;
-  phones: { number: string }[];
-};
+import { Contact } from '../types';
 
 const contactListPage = {
   title: css({

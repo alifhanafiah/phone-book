@@ -7,14 +7,7 @@ import { DELETE_CONTACT_BY_PK } from '../apollo/mutations';
 import { GET_CONTACT_LIST } from '../apollo/queries';
 import img from '../assets/images/google-contacts.png';
 import { colors } from '../assets/styles/const';
-
-type Contact = {
-  created_at: string;
-  first_name: string;
-  id: number;
-  last_name: string;
-  phones: { number: string }[];
-};
+import { Contact } from '../types';
 
 type ListsOfContactProps = {
   contacts: Contact[];
@@ -93,9 +86,24 @@ const ListsOfContact = ({
     if (isDelete) {
       await deleteData({
         variables: {
-          id: id,
+          id,
         },
       });
+
+      // delete the data from the localstorage
+      const localFavoriteContacts = localStorage.getItem('favoriteContacts');
+      if (localFavoriteContacts) {
+        const favoriteContacts = JSON.parse(localFavoriteContacts);
+
+        const updatedFavoriteContacts = favoriteContacts.filter(
+          (contact: Contact) => contact.id !== id
+        );
+
+        localStorage.setItem(
+          'favoriteContacts',
+          JSON.stringify(updatedFavoriteContacts)
+        );
+      }
     }
   };
 
