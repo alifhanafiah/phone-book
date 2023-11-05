@@ -4,6 +4,7 @@ import { colors } from '../assets/styles/const';
 type PaginationProps = {
   onNextClick: () => void;
   onPrevClick: () => void;
+  disablePrev: boolean;
   disableNext: boolean;
 };
 
@@ -36,18 +37,27 @@ const pagination = {
 const Pagination = ({
   onPrevClick,
   onNextClick,
+  disablePrev,
   disableNext,
 }: PaginationProps) => {
   return (
     <>
       {disableNext && (
         <p css={{ textAlign: 'center', marginBlock: '1rem' }}>
-          There are no contacts
+          There are no more contacts
         </p>
       )}
 
       <div css={pagination.container}>
-        <button css={pagination.button} onClick={onPrevClick}>
+        <button
+          css={pagination.button}
+          onClick={onPrevClick}
+          style={
+            disablePrev
+              ? { backgroundColor: 'lightgray', cursor: 'not-allowed' }
+              : {}
+          }
+        >
           Prev
         </button>
 

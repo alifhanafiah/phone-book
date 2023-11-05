@@ -25,16 +25,20 @@ const contactListPage = {
 const ContactListPage = () => {
   const [limit] = useState(10);
   const [offset, setOffset] = useState(0);
+  const [allContacts, setAllContacts] = useState([]);
 
   const [favoriteContacts, setFavoriteContacts] = useState(() => {
     const localValue = localStorage.getItem('favoriteContacts');
     return localValue ? JSON.parse(localValue) : [];
   });
 
+  // Save favorite contacts in localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('favoriteContacts', JSON.stringify(favoriteContacts));
+  }, [favoriteContacts]);
+
   const { loading, error, data } = useQuery(GET_CONTACT_LIST, {
     variables: {
-      limit,
-      offset,
       order_by: {
         first_name: 'asc',
       },
@@ -42,17 +46,35 @@ const ContactListPage = () => {
     fetchPolicy: 'network-only',
   });
 
-  const favoriteContactData = data?.contact.filter((contact: Contact) =>
+  // Save all contacts data to state
+  useEffect(() => {
+    if (data?.contact) {
+      setAllContacts(data.contact);
+    }
+  }, [data]);
+
+  if (error) return `Error! ${error.message}`;
+
+  const nextPage = () => {
+    if (offset + limit < allContacts.length) {
+      setOffset((prevOffset) => prevOffset + limit);
+    }
+  };
+
+  const prevPage = () => {
+    if (offset - limit >= 0) {
+      setOffset((prevOffset) => prevOffset - limit);
+    }
+  };
+
+  const displayedContacts = allContacts.slice(offset, offset + limit);
+
+  const favoriteContactData = displayedContacts.filter((contact: Contact) =>
     favoriteContacts.includes(contact.id)
   );
-  const regularContactData = data?.contact.filter(
+  const regularContactData = displayedContacts.filter(
     (contact: Contact) => !favoriteContacts.includes(contact.id)
   );
-
-  // Save favorite contacts in localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('favoriteContacts', JSON.stringify(favoriteContacts));
-  }, [favoriteContacts]);
 
   const addFavorite = (contact: Contact) => {
     // Check if the contact is already in the favorite list
@@ -67,29 +89,10 @@ const ContactListPage = () => {
   const removeFavorite = (contact: Contact) => {
     // Check if the contact is in the favorite list
     if (favoriteContacts.includes(contact.id)) {
-      setFavoriteContacts((prevFavoriteContacts: []) =>
-        prevFavoriteContacts.filter((id) => id !== contact.id)
-      );
+      setFavoriteContacts((prevFavoriteContacts: []) => {
+        return prevFavoriteContacts.filter((id) => id !== contact.id);
+      });
     }
-  };
-
-  if (error) return `Error! ${error.message}`;
-
-  const nextPage = () => {
-    setOffset((prevOffset) => {
-      return prevOffset + limit;
-    });
-  };
-
-  const prevPage = () => {
-    setOffset((prevOffset) => {
-      // Make sure offset is not negative
-      if (prevOffset - limit >= 0) {
-        return prevOffset - limit;
-      } else {
-        return 0;
-      }
-    });
   };
 
   return (
@@ -120,7 +123,8 @@ const ContactListPage = () => {
       <Pagination
         onNextClick={nextPage}
         onPrevClick={prevPage}
-        disableNext={data?.contact.length === 0}
+        disableNext={offset + limit >= allContacts.length}
+        disablePrev={offset === 0}
       />
     </>
   );
