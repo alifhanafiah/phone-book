@@ -1,17 +1,16 @@
 import { css } from '@emotion/react';
-import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md';
+// import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import img from '../assets/images/google-contacts.png';
 import { colors } from '../assets/styles/const';
 
 type ListsOfContactProps = {
-  phones: {
-    contact: {
-      last_name: string;
-      first_name: string;
-      id: number;
-    };
-    number: string;
+  contacts: {
+    created_at: string;
+    first_name: string;
+    id: number;
+    last_name: string;
+    phones: { number: string }[];
   }[];
 
   // favorited: Record<number, boolean>;
@@ -65,12 +64,15 @@ const listsOfContact = {
   }),
 };
 
-const ListsOfContact = ({ phones }: ListsOfContactProps) => {
+const ListsOfContact = ({
+  contacts,
+}: // favorited,
+// toggleFavorite,
+ListsOfContactProps) => {
   return (
     <ul>
-      {phones.map((phone) => {
-        const { contact, number } = phone;
-        const { id, first_name, last_name } = contact;
+      {contacts.map((contact) => {
+        const { id, first_name, last_name, phones } = contact;
 
         return (
           <li css={listsOfContact.contact} key={id}>
@@ -80,7 +82,7 @@ const ListsOfContact = ({ phones }: ListsOfContactProps) => {
                 <h3 css={listsOfContact.name}>
                   {first_name} {last_name}
                 </h3>
-                <p css={listsOfContact.phone}>{number}</p>
+                <p css={listsOfContact.phone}>{phones[0].number}</p>
               </div>
             </Link>
             <button
