@@ -113,6 +113,7 @@ const ContactListPage = () => {
   return (
     <>
       <Nav />
+
       <h2 css={contactListPage.title}>⭐ Favorite</h2>
       {loading ? (
         <Loading height="10vh" />
@@ -123,6 +124,7 @@ const ContactListPage = () => {
           isFavoriteList={true}
         />
       )}
+
       <h2 css={contactListPage.title}>🫂 Contacts</h2>
       {loading ? (
         <Loading height="10vh" />
@@ -133,11 +135,7 @@ const ContactListPage = () => {
           isFavoriteList={false}
         />
       )}
-      {regularContactData.length === 0 && (
-        <p css={{ textAlign: 'center', marginBlock: '1rem' }}>
-          There are no more contacts
-        </p>
-      )}
+
       <Pagination
         onPrevClick={prevPage}
         onNextClick={nextPage}
