@@ -51,9 +51,11 @@ const listsOfContact = {
     color: colors.secondary,
     backgroundColor: 'inherit',
     fontSize: '1.5rem',
+    transition: '200ms',
 
     ':hover': {
       cursor: 'pointer',
+      color: 'hsl(190, 58%, 70%)',
     },
   }),
 
