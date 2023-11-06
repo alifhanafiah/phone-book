@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { EDIT_CONTACT_BY_ID } from '../apollo/mutations';
+import { EDIT_CONTACT_BY_ID, EDIT_PHONE_NUMBER } from '../apollo/mutations';
 import { GET_CONTACT_DETAIL } from '../apollo/queries';
 
 const formContact = {
@@ -54,21 +54,6 @@ const formContact = {
     },
   }),
 
-  buttonDel: css({
-    padding: '0.5rem 1rem',
-    backgroundColor: '#e74c3c',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '.5rem',
-    cursor: 'pointer',
-    transition: 'background 0.3s',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-
-    '&:hover': {
-      background: '#c0392b',
-    },
-  }),
-
   cancelButton: css({
     padding: '.7rem',
     backgroundColor: '#e74c3c',
@@ -94,46 +79,34 @@ const FormEditContactPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  // const [phoneNumbers, setPhoneNumbers] = useState<string[]>(['']);
+  const [phoneNumbers, setPhoneNumbers] = useState(['']);
+  const [pkPhoneNumber, setPkPhoneNumber] = useState([]);
 
   const { data } = useQuery(GET_CONTACT_DETAIL, { variables: { id } });
 
   const [editContact, { loading: loadingUpdate }] =
     useMutation(EDIT_CONTACT_BY_ID);
-  // const [editPhone, { loading: loadingUpdate }] =
-  //   useMutation(EDIT_PHONE_NUMBER);
+  const [editPhone] = useMutation(EDIT_PHONE_NUMBER);
 
   useEffect(() => {
     if (data && data.contact_by_pk) {
       const contact = data.contact_by_pk;
       setFirstName(contact.first_name);
       setLastName(contact.last_name);
-      // setPhoneNumbers(
-      //   contact.phones.map((phone: { number: number }) => phone.number)
-      // );
+      setPhoneNumbers(
+        contact.phones.map((phone: { number: number }) => phone.number)
+      );
+      setPkPhoneNumber(
+        contact.phones.map((phone: { number: number }) => phone.number)
+      );
     }
   }, [data]);
 
-  // const handleAddPhone = () => {
-  //   if (phoneNumbers[phoneNumbers.length - 1] !== '') {
-  //     setPhoneNumbers([...phoneNumbers, '']);
-  //   } else {
-  //     setErrorMessage('You have to fill the phone number to add more');
-  //   }
-  // };
-
-  // const handleDeletePhone = (indexToDelete: number) => {
-  //   const updatedPhoneNumbers = phoneNumbers.filter(
-  //     (_, index) => index !== indexToDelete
-  //   );
-  //   setPhoneNumbers(updatedPhoneNumbers);
-  // };
-
-  // const handlePhoneChange = (index: number, value: string) => {
-  //   const updatedPhoneNumbers = [...phoneNumbers];
-  //   updatedPhoneNumbers[index] = value;
-  //   setPhoneNumbers(updatedPhoneNumbers);
-  // };
+  const handlePhoneChange = (index: number, value: string) => {
+    const updatedPhoneNumbers = [...phoneNumbers];
+    updatedPhoneNumbers[index] = value;
+    setPhoneNumbers(updatedPhoneNumbers);
+  };
 
   const handleSubmit = async () => {
     if (
@@ -147,7 +120,7 @@ const FormEditContactPage = () => {
       try {
         await editContact({
           variables: {
-            id: id,
+            id,
             _set: {
               first_name: firstName,
               last_name: lastName,
@@ -155,9 +128,19 @@ const FormEditContactPage = () => {
           },
         });
 
-        // await editPhone({
-        //   variables: {},
-        // });
+        if (pkPhoneNumber) {
+          pkPhoneNumber.forEach(async (_, index) => {
+            await editPhone({
+              variables: {
+                pk_columns: {
+                  contact_id: id,
+                  number: pkPhoneNumber[index],
+                },
+                new_phone_number: phoneNumbers[index],
+              },
+            });
+          });
+        }
 
         setErrorMessage('');
         navigate('/');
@@ -170,6 +153,7 @@ const FormEditContactPage = () => {
   return (
     <div css={formContact.container}>
       <p css={{ color: 'red' }}>{errorMessage}</p>
+
       <p>First Name</p>
       <input
         css={formContact.input}
@@ -179,7 +163,7 @@ const FormEditContactPage = () => {
         onChange={(e) => setFirstName(e.target.value)}
       />
 
-      <p>Last Name</p>
+      <p css={{ marginTop: '1rem' }}>Last Name</p>
       <input
         css={formContact.input}
         type="text"
@@ -187,17 +171,8 @@ const FormEditContactPage = () => {
         value={lastName}
         onChange={(e) => setLastName(e.target.value)}
       />
-      {/* <button
-        css={formContact.button}
-        onClick={handleAddPhone}
-        style={
-          loadingUpdate
-            ? { backgroundColor: 'lightgray', cursor: 'not-allowed' }
-            : {}
-        }
-      >
-        Add Phone
-      </button>
+
+      <p css={{ marginTop: '1rem' }}>Phone(s)</p>
       {phoneNumbers.map((phoneNumber, index) => (
         <div key={index} css={formContact.phone}>
           <input
@@ -207,15 +182,8 @@ const FormEditContactPage = () => {
             value={phoneNumber}
             onChange={(e) => handlePhoneChange(index, e.target.value)}
           />
-          <button
-            css={formContact.buttonDel}
-            onClick={() => handleDeletePhone(index)}
-            disabled={index === 0 && phoneNumber === ''}
-          >
-            Delete
-          </button>
         </div>
-      ))} */}
+      ))}
       <button
         css={formContact.button}
         onClick={handleSubmit}
