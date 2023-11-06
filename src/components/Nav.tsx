@@ -38,7 +38,7 @@ const Nav = () => {
     <nav>
       <ul css={navCss.list}>
         <li>
-          <Link to="/contact/add" css={navCss.icon}>
+          <Link to="/contact/add" css={navCss.icon} aria-label="Add Contact">
             <AiOutlinePlus css={navCss.iconSvg} />
           </Link>
         </li>

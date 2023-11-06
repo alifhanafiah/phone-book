@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { css } from '@emotion/react';
+import { AiOutlineEdit } from 'react-icons/ai';
 import { BiTrashAlt } from 'react-icons/bi';
 import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md';
 import { Link } from 'react-router-dom';
@@ -46,6 +47,7 @@ const listsOfContact = {
     color: colors.secondary,
     backgroundColor: 'inherit',
     fontSize: '1.5rem',
+    padding: '.25rem',
     transition: '200ms',
 
     ':hover': {
@@ -115,7 +117,7 @@ const ListsOfContact = ({
         return (
           <li css={listsOfContact.contact} key={id}>
             <Link to={`/contact/${id}`} css={listsOfContact.link}>
-              <img src={img} css={listsOfContact.image} />
+              <img src={img} css={listsOfContact.image} alt="Profile Picture" />
               <div>
                 <h3 css={listsOfContact.name}>
                   {first_name} {last_name}
@@ -128,6 +130,9 @@ const ListsOfContact = ({
               <button
                 onClick={() => onAddFavorite(contact)}
                 css={listsOfContact.button}
+                aria-label={
+                  isFavoriteList ? 'Remove from Favorites' : 'Add to Favorites'
+                }
               >
                 {isFavoriteList ? (
                   <MdOutlineFavorite />
@@ -136,9 +141,18 @@ const ListsOfContact = ({
                 )}
               </button>
 
+              <Link
+                to={`/contact/edit/${id}`}
+                css={listsOfContact.button}
+                aria-label={`Edit ${contact.first_name} ${contact.last_name}`}
+              >
+                <AiOutlineEdit />
+              </Link>
+
               <button
                 onClick={() => deleteHandler(id)}
                 css={listsOfContact.button}
+                aria-label="Delete Contact"
               >
                 <BiTrashAlt />
               </button>
