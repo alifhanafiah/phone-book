@@ -10,7 +10,7 @@ const searchBarStyle = css({
   display: 'flex',
   alignItems: 'center',
   gap: '1rem',
-  margin: '2rem',
+  marginBlock: '2rem',
   padding: '.5rem',
   backgroundColor: colors.secondary,
   border: '1px solid #ccc',
