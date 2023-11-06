@@ -45,6 +45,7 @@ const Pagination = ({
       <button
         css={pagination.button}
         onClick={onPrevClick}
+        disabled={disablePrev}
         style={
           disablePrev
             ? {
@@ -61,6 +62,7 @@ const Pagination = ({
       <button
         css={pagination.button}
         onClick={onNextClick}
+        disabled={disableNext}
         style={
           disableNext
             ? {
