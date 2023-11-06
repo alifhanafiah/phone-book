@@ -4,7 +4,7 @@ This is a Phone Book web application built with React.js, TypeScript, GraphQL, a
 
 ## Demo
 
-You can access a live demo of this web app here: [Link to Demo](https://github.com/alifhanafiah/phone-book)
+You can access a live demo of this web app here: [Link to Demo](https://phone-book-sand.vercel.app/)
 
 ## Technical Stack
 
