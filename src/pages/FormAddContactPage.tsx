@@ -75,7 +75,7 @@ const formContact = {
   }),
 };
 
-const FormContactPage = () => {
+const FormAddContactPage = () => {
   const navigate = useNavigate();
   const specialCharacterPattern = /[^a-zA-Z0-9 ]/; // Regular expression to check for special characters
 
@@ -222,4 +222,4 @@ const FormContactPage = () => {
   );
 };
 
-export default FormContactPage;
+export default FormAddContactPage;
