@@ -4,7 +4,8 @@ import { colors } from './assets/styles/const';
 import ContactDetailPage from './pages/ContactDetailPage';
 import ContactListPage from './pages/ContactListPage';
 import ErrorPage from './pages/ErrorPage';
-import FormContactPage from './pages/FormContactPage';
+import FormAddContactPage from './pages/FormAddContactPage';
+import FormEditContactPage from './pages/FormEditContactPage';
 import RootPage from './pages/RootPage';
 
 const router = createBrowserRouter([
@@ -18,12 +19,16 @@ const router = createBrowserRouter([
         element: <ContactListPage />,
       },
       {
-        path: '/contact/add',
-        element: <FormContactPage />,
-      },
-      {
         path: '/contact/:id',
         element: <ContactDetailPage />,
+      },
+      {
+        path: '/contact/edit/:id',
+        element: <FormEditContactPage />,
+      },
+      {
+        path: '/contact/add',
+        element: <FormAddContactPage />,
       },
     ],
   },

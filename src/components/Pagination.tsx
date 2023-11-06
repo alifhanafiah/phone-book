@@ -47,7 +47,11 @@ const Pagination = ({
         onClick={onPrevClick}
         style={
           disablePrev
-            ? { backgroundColor: 'lightgray', cursor: 'not-allowed' }
+            ? {
+                backgroundColor: 'lightgray',
+                color: colors.primary,
+                cursor: 'not-allowed',
+              }
             : {}
         }
       >
@@ -59,7 +63,11 @@ const Pagination = ({
         onClick={onNextClick}
         style={
           disableNext
-            ? { backgroundColor: 'lightgray', cursor: 'not-allowed' }
+            ? {
+                backgroundColor: 'lightgray',
+                color: colors.primary,
+                cursor: 'not-allowed',
+              }
             : {}
         }
       >
