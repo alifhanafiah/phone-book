@@ -14,12 +14,13 @@ const searchBarStyle = css({
   padding: '.5rem',
   backgroundColor: colors.secondary,
   border: '1px solid #ccc',
-  borderRadius: '5px',
+  borderRadius: '1rem',
 
   input: {
     flex: '1',
     border: 'none',
-    padding: '5px',
+    borderRadius: '.5rem',
+    padding: '.4rem',
     outline: 'none',
   },
 
@@ -30,7 +31,7 @@ const searchBarStyle = css({
     border: 'none',
     cursor: 'pointer',
     fontSize: '1rem',
-    borderRadius: '5px',
+    borderRadius: '.8rem',
     outline: 'none',
     transition: '300ms',
 
