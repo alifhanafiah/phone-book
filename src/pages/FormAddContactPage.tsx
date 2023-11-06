@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ADD_CONTACT_WITH_PHONES } from '../apollo/mutations';
 import { GET_CONTACT_NAMES_LIST } from '../apollo/queries';
 
@@ -18,7 +18,7 @@ const formContact = {
     textAlign: 'center',
     backgroundColor: '#1f2937',
     borderRadius: '2rem',
-    paddingInline: '5rem',
+    paddingInline: '2rem',
     paddingTop: '1rem',
     paddingBottom: '2rem',
   }),
@@ -61,7 +61,7 @@ const formContact = {
 
   buttonDel: css({
     padding: '0.5rem 1rem',
-    backgroundColor: '#ff4646',
+    backgroundColor: '#e74c3c',
     color: '#fff',
     border: 'none',
     borderRadius: '.5rem',
@@ -70,7 +70,23 @@ const formContact = {
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
 
     '&:hover': {
-      background: '#d61111',
+      background: '#c0392b',
+    },
+  }),
+
+  cancelButton: css({
+    padding: '.7rem',
+    backgroundColor: '#e74c3c',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '.5rem',
+    cursor: 'pointer',
+    fontSize: '1.2rem',
+    transition: 'background 0.3s',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+
+    '&:hover': {
+      background: '#c0392b',
     },
   }),
 };
@@ -218,6 +234,10 @@ const FormAddContactPage = () => {
       >
         {loadingSubmit ? 'Submitting...' : 'Submit'}
       </button>
+
+      <Link to="/" css={formContact.cancelButton}>
+        Cancel
+      </Link>
     </div>
   );
 };
