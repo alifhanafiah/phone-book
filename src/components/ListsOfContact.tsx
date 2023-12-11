@@ -1,5 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { css } from '@emotion/react';
+import autoAnimate from '@formkit/auto-animate';
+import { useEffect, useRef } from 'react';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { BiTrashAlt } from 'react-icons/bi';
 import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md';
@@ -78,6 +80,8 @@ const ListsOfContact = ({
   onAddFavorite,
   isFavoriteList,
 }: ListsOfContactProps) => {
+  const parent = useRef(null);
+
   const [deleteData] = useMutation(DELETE_CONTACT_BY_PK, {
     refetchQueries: [GET_CONTACT_LIST],
   });
@@ -109,8 +113,12 @@ const ListsOfContact = ({
     }
   };
 
+  useEffect(() => {
+    parent.current && autoAnimate(parent.current);
+  }, [parent]);
+
   return (
-    <ul>
+    <ul ref={parent}>
       {contacts?.map((contact) => {
         const { id, first_name, last_name, phones } = contact;
 
