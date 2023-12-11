@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
-import { useState } from 'react';
+import autoAnimate from '@formkit/auto-animate';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ADD_CONTACT_WITH_PHONES } from '../apollo/mutations';
 import { GET_CONTACT_NAMES_LIST } from '../apollo/queries';
@@ -40,6 +41,7 @@ const formContact = {
   phone: css({
     display: 'flex',
     gap: '1rem',
+    marginBottom: '.5rem',
   }),
 
   button: css({
@@ -92,6 +94,8 @@ const formContact = {
 };
 
 const FormAddContactPage = () => {
+  const parent = useRef(null);
+
   const navigate = useNavigate();
   const specialCharacterPattern = /[^a-zA-Z0-9 ]/; // Regular expression to check for special characters
 
@@ -177,6 +181,10 @@ const FormAddContactPage = () => {
     }
   };
 
+  useEffect(() => {
+    parent.current && autoAnimate(parent.current);
+  }, [parent]);
+
   return (
     <div css={formContact.container}>
       <p css={{ color: 'red' }}>{errorMessage}</p>
@@ -205,24 +213,26 @@ const FormAddContactPage = () => {
       >
         Add Phone
       </button>
-      {phoneNumbers.map((phoneNumber, index) => (
-        <div key={index} css={formContact.phone}>
-          <input
-            css={formContact.input}
-            type="text"
-            placeholder="Phone Number"
-            value={phoneNumber}
-            onChange={(e) => handlePhoneChange(index, e.target.value)}
-          />
-          <button
-            css={formContact.buttonDel}
-            onClick={() => handleDeletePhone(index)}
-            disabled={index === 0 && phoneNumber === ''}
-          >
-            Delete
-          </button>
-        </div>
-      ))}
+      <div ref={parent}>
+        {phoneNumbers.map((phoneNumber, index) => (
+          <div key={index} css={formContact.phone}>
+            <input
+              css={formContact.input}
+              type="text"
+              placeholder="Phone Number"
+              value={phoneNumber}
+              onChange={(e) => handlePhoneChange(index, e.target.value)}
+            />
+            <button
+              css={formContact.buttonDel}
+              onClick={() => handleDeletePhone(index)}
+              disabled={index === 0 && phoneNumber === ''}
+            >
+              Delete
+            </button>
+          </div>
+        ))}
+      </div>
       <button
         css={formContact.button}
         onClick={handleSubmit}
